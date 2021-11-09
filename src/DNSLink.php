@@ -16,7 +16,7 @@ class DNSLink
         $this->client->setToken($key);
     }
 
-    function addDomain(string $name, string $zone)
+    function addDomain(string $name, string $zone): bool
     {
         $resp = $this->client->subscription("addDomain", [
             "__args" => [
@@ -49,7 +49,7 @@ class DNSLink
         return $resp["data"]["addRecord"];
     }
 
-    function listZone()
+    function listZone(): array
     {
         $resp = $this->client->query([
             "listZone" => [
@@ -57,5 +57,32 @@ class DNSLink
             ]
         ]);
         return $resp["data"]["listZone"];
+    }
+
+    function deleteDomain(string $name): bool
+    {
+        $resp = $this->client->mutation("deleteDomain", [
+            "__args" => [
+                "name" => $name
+            ]
+        ]);
+        if ($resp["error"]) {
+            throw new Exception($resp["error"]["message"]);
+        }
+        return $resp["data"]["deleteDomain"];
+    }
+
+    function deleteRecords(string $name, string $type): bool
+    {
+        $resp = $this->client->mutation("deleteRecords", [
+            "__args" => [
+                "name" => $name,
+                "type" => $type
+            ]
+        ]);
+        if ($resp["error"]) {
+            throw new Exception($resp["error"]["message"]);
+        }
+        return $resp["data"]["deleteRecords"];
     }
 }
