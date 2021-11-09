@@ -2,6 +2,8 @@
 
 namespace DNSLink;
 
+use Exception;
+
 class DNSLink
 {
     const SERVER = "https://dnslink.hk/api/";
@@ -14,13 +16,19 @@ class DNSLink
         $this->client->setToken($key);
     }
 
-    function addDomain(string $name)
+    function addDomain(string $name, string $zone)
     {
         $resp = $this->client->subscription("addDomain", [
             "__args" => [
-                "name" => $name
+                "name" => $name,
+                "username" => "",
+                "password" => "",
+                "zone" => $zone
             ]
         ]);
+        if ($resp["error"]) {
+            throw new Exception($resp["error"]["message"]);
+        }
         return $resp["data"]["addDomain"];
     }
 
@@ -34,6 +42,10 @@ class DNSLink
                 "ttl" => $ttl
             ]
         ]);
+        if ($resp["error"]) {
+            throw new Exception($resp["error"]["message"]);
+        }
+
         return $resp["data"]["addRecord"];
     }
 

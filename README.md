@@ -3,12 +3,12 @@
 ### add domain
 ```php
 $dnslink=new DNSLink($key);
-$dnslink->addDomain("test.com");
+$dnslink->addDomain("abc.test.com","test.com");
 ```
 
 ### addRecord
 ```php
 $dnslink=new DNSLink($key);
-$dnslink->addRecord("test.com","hello","TXT",3600);
+$dnslink->addRecord("abc.test.com","hello","TXT",3600);
 ```
 
